@@ -13,7 +13,7 @@ config =
 
 main :: IO ()
 main = hakyllWith config $ do
-  match "images/*" $ do
+  match ("images/*" .||. "fonts/*") $ do
     route idRoute
     compile copyFileCompiler
 

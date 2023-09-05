@@ -1,34 +1,60 @@
+@font-face {
+  font-family: Font;
+  src: url("../fonts/font-Regular.otf") format("opentype");
+}
+
+:root {
+  --primary: rgb(0, 173, 181);
+  --secondary: rgb(238, 238, 238);
+  --text: white;
+  --red: #cc241d;
+  --blue: #458588;
+  --purple: #b16286;
+  --bg: #282828;
+  --background-lighter: rgb(57, 62, 70);
+  --page-padding: 20%;
+}
+
 html {
   font-size: 62.5%;
 }
 
 body {
-  font-size: 1.6rem;
-  color: #000;
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 40px auto;
+  max-width: 650px;
+  line-height: 1.6;
+  font-size: 18px;
+  font-family: Font;
 }
 
 header {
-  border-bottom: 0.2rem solid #000;
+  border-bottom: 0.1rem solid var(--text);
 }
 
 nav {
   text-align: right;
 }
 
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
 nav a {
   font-size: 1.8rem;
   font-weight: bold;
-  color: black;
-  text-decoration: none;
-  text-transform: uppercase;
+  color: white;
+  text-transform: capitalize;
 }
 
 footer {
   margin-top: 3rem;
   padding: 1.2rem 0;
-  border-top: 0.2rem solid #000;
+  border-top: 0.1rem solid var(--text);
   font-size: 1.2rem;
-  color: #555;
 }
 
 h1 {
@@ -42,12 +68,11 @@ h2 {
 article .header {
   font-size: 1.4rem;
   font-style: italic;
-  color: #555;
 }
 
 .logo a {
   font-weight: bold;
-  color: #000;
+  color: white;
   text-decoration: none;
 }
 
@@ -104,8 +129,12 @@ article .header {
     font-size: 2.4rem;
   }
   nav a {
+    margin: 0 0 0 0.6rem;
     display: inline;
-    margin: 0 0.6rem;
+  }
+  nav a:last-of-type {
+    margin: 0 0.6rem 0 0.6rem;
+    display: inline;
   }
 }
 
@@ -125,6 +154,10 @@ article .header {
   }
   nav a {
     margin: 0 0 0 1.2rem;
+    display: inline;
+  }
+  nav a:last-of-type {
+    margin: 0 1.2rem 0 1.2rem;
     display: inline;
   }
   footer {
