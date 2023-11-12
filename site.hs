@@ -3,6 +3,7 @@
 
 import Data.Monoid (mappend)
 import Hakyll
+import System.FilePath (takeBaseName, takeDirectory, (</>))
 
 --------------------------------------------------------------------------------
 config :: Configuration
@@ -66,7 +67,15 @@ main = hakyllWith config $ do
   match "templates/*" $ compile templateBodyCompiler
 
 --------------------------------------------------------------------------------
+
 postCtx :: Context String
 postCtx =
   dateField "date" "%B %e, %Y"
     `mappend` defaultContext
+
+cleanRoute :: Routes
+cleanRoute = customRoute createIndexRoute
+  where
+    createIndexRoute ident = takeDirectory p </> takeBaseName p </> "index.html"
+      where
+        p = toFilePath ident

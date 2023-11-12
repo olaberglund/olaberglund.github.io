@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Hakyll Blog - WPI - Subsequences of size n</title>
+    <link rel="stylesheet" href="../css/default.css" />
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <a href="../">Bandola's blog</a>
+      </div>
+      <nav>
+        <span>[</span><a href="../">Home</a><span>,</span>
+        <a href="../about.html">About</a><span>,</span>
+        <a href="../contact.html">Contact</a><span>,</span>
+        <a href="../archive.html">Archive</a><span>]</span>
+      </nav>
+    </header>
+
+    <main role="main">
+      <h1>WPI - Subsequences of size n</h1>
+      <article>
+    <section class="header">
+        Posted on November  2, 2023
+        
+            by Ola
+        
+    </section>
+    <section>
+        <!-- https://stackoverflow.com/a/21288092/13131325 -->
+<p>This algorithm is super fast. It utilizes dynamic programming, and I’m going to take a closer look at it!</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ot">subsequencesOfSize ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [[a]]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>subsequencesOfSize n xs <span class="ot">=</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> l <span class="ot">=</span> <span class="fu">length</span> xs</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="kw">in</span> <span class="kw">if</span> n <span class="op">&gt;</span> l <span class="kw">then</span> [] <span class="kw">else</span> subsequencesBySize xs <span class="op">!!</span> (l <span class="op">-</span> n)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    subsequencesBySize [] <span class="ot">=</span> [[[]]]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    subsequencesBySize (x <span class="op">:</span> xs) <span class="ot">=</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="kw">let</span> next <span class="ot">=</span> subsequencesBySize xs</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>       <span class="kw">in</span> <span class="fu">zipWith</span> (<span class="op">++</span>) ([] <span class="op">:</span> next) (<span class="fu">map</span> (<span class="fu">map</span> (x <span class="op">:</span>)) next <span class="op">++</span> [[]])</span></code></pre></div>
+<p>The author, Bergi, said this:</p>
+<blockquote>
+<p>Not that appending the empty lists is the most beautiful solution, but you can see how I have used <code>zipWith</code> with the displaced lists so that the results from next are used twice - once directly in the list of subsequences of length n and once in the list of subsequences of length n+1.</p>
+</blockquote>
+<h2 id="dynamic-programming">Dynamic programming</h2>
+<!-- reference skeppsteds book -->
+<h2 id="the-algorithm">The Algorithm</h2>
+<p>So let’s now break up the algorithm into it’s constituent parts, going deeper for each step. The front algorithm simply returns an empty array if the requested length for the subsequences are longer than the actual list. That makes sense - you can’t produce a subsequence that is longer than the original list (by the definition of subsequence). A definition is:</p>
+<blockquote>
+<p>A subsequence of a given sequence is a sequence that can be derived from the given sequence by deleting some or no elements without changing the order of the remaining elements.</p>
+</blockquote>
+<p>If the requested length is valid, it gets the list of subsequences of the requested size. <code>subsequencesBySize</code> produces a finite list of <em>lists of subsequences</em>. That is, each element in the list is a list of subsequences of a certain size. The size of the subsequence decreases for each list of subsequences. Take a look at this output to understand:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> subsequencesBySize [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>[[[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]],[[<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">1</span>,<span class="dv">3</span>],[<span class="dv">1</span>,<span class="dv">2</span>]],[[<span class="dv">3</span>],[<span class="dv">2</span>],[<span class="dv">1</span>]],[[]]]</span></code></pre></div>
+<p>So if we want to find the list that produces subsequences of size <code>n</code> we need to use the backwards index <code>l-n</code>.</p>
+<h2 id="benchmarks">Benchmarks</h2>
+<h2 id="possible-improvements-array-vector">Possible improvements: Array, Vector</h2>
+    </section>
+</article>
+
+    </main>
+
+    <footer>
+      Site proudly generated by
+      <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+    </footer>
+  </body>
+</html>
